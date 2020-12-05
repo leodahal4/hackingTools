@@ -1,13 +1,13 @@
+import subprocess
+import optparse
 try:
     import scapy.all as scapy
 
 except:
-    import subprocess
     print("Provide password for installing scapy.")
     subprocess.call("sudo pip3 install scapy", shell=1)
 
 
-import optparse
 
 
 class Network():
@@ -53,7 +53,7 @@ class Network():
 
 def checkArguments(options):
     if (options.target == None):
-	subprocess.call("clear", shell=True)
+        subprocess.call("clear", shell=True)
         print("Please provide IP or IP range.\nTry running with --help options.")
         exit(0)
 
