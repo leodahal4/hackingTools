@@ -16,7 +16,7 @@ class Network():
         bordcastMac = scapy.Ether(dst='ff:ff:ff:ff:ff:ff')
         scapy.conf.verb = 0
         try:
-            connectedClients = scapy.srp(bordcastMac/arpRequest, timeout=2, verbose=1,iface="wlan0", inter=0.1)[0]
+            connectedClients = scapy.srp(bordcastMac/arpRequest, timeout=3, verbose=1, inter=0.1)[0]
             print(connectedClients)
             self.connectedNodes = []
             for nodes in connectedClients:

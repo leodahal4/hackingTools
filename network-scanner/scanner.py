@@ -11,18 +11,15 @@ def getArguments():
     args_options, arguments = parser.parse_args()
     return args_options
 
-
 def createPacket(ip):
     arp_request = scapy.ARP(pdst=ip)  # create a ARP request object by scapy
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")  # We have set the destination
     arp_request_broadcast = broadcast / arp_request
     return (arp_request_broadcast)
 
-
 def transmitPacket(packet):
-    success_list, failure_list = scapy.srp(packet, timeout=1)
+    success_list, failure_list = scapy.srp(packet, timeout=3, inter=0.1, verbose=1)
     return success_list
-
 
 def getOS(ip_addr):
     ttl_values = {32: "Windows", 60: "MAC OS", 64: "Linux", 128: "Windows", 255: "Linux 2.4 Kernal"}
@@ -35,7 +32,6 @@ def getOS(ip_addr):
     else:
         return "Packets could not send successfully"
 
-
 def parseResponse(success_list):
     targets = []
     for success in success_list:
@@ -43,13 +39,11 @@ def parseResponse(success_list):
         targets.append(entry)
     return targets
 
-
 def print_analysis(element_entries):
     print("IP\t\t\tMAC Address\t\t\tOPERATING SYSTEM")
     print("." * 100)
     for element in entries:
         print(element["ip"] + "\t\t" + element['mac'] + "\t\t" + getOS(element["ip"]) + "\n")
-
 
 options = getArguments()
 
