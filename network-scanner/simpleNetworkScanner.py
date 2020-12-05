@@ -1,29 +1,28 @@
 import subprocess
 import optparse
+import sys
 try:
     import scapy.all as scapy
-
 except:
     print("Provide password for installing scapy.")
     subprocess.call("sudo pip3 install scapy", shell=1)
 
-
-
-
 class Network():
     def __init__(self, ip):
         self.ip = ip
-        self.scan()
 
     def scan(self):
         arpRequest = scapy.ARP(pdst=self.ip)
         bordcastMac = scapy.Ether(dst='ff:ff:ff:ff:ff:ff')
-
+        scapy.conf.verb = 0
         try:
-            connectedClients = scapy.srp(bordcastMac/arpRequest, timeout=1, verbose=0)[0]
+            connectedClients = scapy.srp(bordcastMac/arpRequest, timeout=2, verbose=1,iface="wlan0", inter=0.1)[0]
+            print(connectedClients)
             self.connectedNodes = []
             for nodes in connectedClients:
                 self.connectedNodes.append({"IP": nodes[1].psrc, "MAC": nodes[1].hwsrc})
+
+            scapy.conf.verb = 1
         except:
             subprocess.call("clear", shell=1)
             print("Please provide sudo permission for scanning the network.")
@@ -32,7 +31,7 @@ class Network():
         self.printOut()
 
     def printOut(self):
-        self.clearScreen()
+        # self.clearScreen()
         self.totalClients()
         print(f"There are total {self.totalNodes} devices connected to this network.")
         print("\t_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
@@ -49,7 +48,6 @@ class Network():
     def clearScreen(self):
         for i in range(1,100):
             print("")
-
 
 def checkArguments(options):
     if (options.target == None):
@@ -68,3 +66,4 @@ print("Scanning...")
 options = getArguments()
 checkArguments(options)
 scanthis = Network(options.target)
+scanthis.scan()
