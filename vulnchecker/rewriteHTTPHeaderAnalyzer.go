@@ -23,7 +23,7 @@ func newPacket(thisOne *http.Response) *httpPacket{
 func declareParameters() [9]string{
   // dedecdeclareParameters()
   // This cunction declares the parameters that are to be checked on the 
-  // headear
+  // header
   var parameters [9]string
   parameters[0] = "x-powered-by"
   parameters[1] = "x-xss-protection"
@@ -40,33 +40,82 @@ func declareParameters() [9]string{
 
 }
 
+func printResult(results [9]map[string]string){
+  // printResult
+  // This function prints all the results that are obtained from analyze function
+  fmt.Println(results)
+}
+
 func analyze(val *httpPacket) {
   const standardOutNOTFOUND string = "[NOT FOUND]\t"
   const standardOutFOUND string = "[FOUND]\t"
+  var description string
+  const redStatus string = "[RED]"
+  const greenStatus string = "[GREEN]"
+  var vulnerabilityStatus string
+  // result := make(map[string]string)
+  var resultContainer [9]map[string]string
 
   parameters := declareParameters()
   XpoweredBy := val.headers.Get(parameters[0])
   if(XpoweredBy == ""){
-    fmt.Println("\"X-POWERED-BY\"\t NotFound")
+    description = "\"X-POWERED-BY\"\t NotFound"
+    vulnerabilityStatus = greenStatus
+
+    resultContainer[0] = map[string]string{
+      "standard": standardOutFOUND,
+      "description": description,
+      "vulnerabilityStatus": vulnerabilityStatus,
+    }
+
   } else {
-    fmt.Println(standardOutFOUND + "\"X-POWERED-BY\"\theader Found.\t[Remove]")
+    serverName := XpoweredBy
+    description = "[\"X-POWERED-BY\" header Found with \" " + serverName + " \".]"
+    vulnerabilityStatus = redStatus
+
+    resultContainer[0] = map[string]string{
+      "standard": standardOutFOUND,
+      "description": description,
+      "vulnerabilityStatus": vulnerabilityStatus,
+    }
+
   }
 
   XXssProtection := val.headers.Get(parameters[1])
   if(XXssProtection == ""){
-    fmt.Println(standardOutNOTFOUND + "X-XSS-Protection header.\tX-XSS-Protection header is either inadequate or missing.The users with the old browsers may be vulnerable to Cross-Site Scripting Attacks.")
-  } else {
-    fmt.Println(XXssProtection, " xss header printed")
-    if(XXssProtection == "1; mode=block") {
-      fmt.Println(standardOutFOUND + "X-XSS-Protection enforced")
-    } else{
-      fmt.Println(standardOutNOTFOUND + "X-XSS-Protection header.\tX-XSS-Protection header is either inadequate or missing.The users with the old browsers may be vulnerable to Cross-Site Scripting Attacks.")
+    description = "X-XSS-Protection header.\tX-XSS-Protection header is either inadequate or missing.The users with the old browsers may be vulnerable to Cross-Site Scripting Attacks."
+    vulnerabilityStatus = redStatus
+
+    resultContainer[1] = map[string]string{
+      "standard": standardOutNOTFOUND,
+      "description": description,
+      "vulnerabilityStatus": vulnerabilityStatus,
     }
-    fmt.Println("Found XSS")
+  } else {
+    if(XXssProtection == "1; mode=block") {
+      description = "X-XSS-Protection enforced"
+      vulnerabilityStatus = greenStatus
+
+      resultContainer[1] = map[string]string{
+        "standard": standardOutFOUND,
+        "description": description,
+        "vulnerabilityStatus": vulnerabilityStatus,
+      }
+    } else{
+      description = "X-XSS-Protection header.\tX-XSS-Protection header is either inadequate or missing.The users with the old browsers may be vulnerable to Cross-Site Scripting Attacks."
+      vulnerabilityStatus = redStatus
+
+      resultContainer[1] = map[string]string{
+        "standard": standardOutNOTFOUND,
+        "description": description,
+        "vulnerabilityStatus": vulnerabilityStatus,
+      }
+    }
   }
 
   XFrameOptions := val.headers.Get(parameters[2])
   if(XFrameOptions == ""){}
+  printResult(resultContainer)
 }
 
 func initialize(res *http.Response) {
